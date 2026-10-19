@@ -1,0 +1,7 @@
+{
+    "name": "ebremner17/school_schedule",
+    "description": "School schedule module for ericbremner.",
+    "type": "drupal-custom-module",
+    "homepage": "https://github.com/ebremner17/school_schedule",
+    "keywords": ["Drupal"]
+}
