@@ -123,6 +123,10 @@ body {
   margin-bottom: 30px;
 }
 
+.print-page-title {
+  display: none;
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -359,12 +363,19 @@ body {
     min-height: 78px !important;
   }
 
+  /* Each printed page now carries its own "<Child> School Schedule" title
+     (see .print-page-title below), so the on-screen section heading above
+     each child's calendars would just add a redundant near-empty page. */
   .child-heading {
-    break-before: page;
+    display: none !important;
   }
 
-  .child-heading:first-of-type {
-    break-before: auto;
+  .print-page-title {
+    display: block !important;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
   }
 
   .calendar-container {

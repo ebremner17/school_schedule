@@ -6,6 +6,7 @@
 
   const CHILDREN = ['finnley', 'amelia'];
   const CHILD_LABELS = { finnley: 'Finnley', amelia: 'Amelia' };
+  const CHILD_PAGE_TITLES = { finnley: 'Finnley School Schedule', amelia: 'Amelia School Schedule' };
 
   const AM_LABELS = { bus: 'Bus', dropoff: 'Dropoff', late_arrival: 'Late Arrival' };
   const PM_LABELS = { bus: 'Bus', pickup: 'Pickup', early_pickup: 'Early Pickup' };
@@ -225,6 +226,7 @@
     const card = document.createElement('div');
     card.className = 'calendar-container';
     card.innerHTML = `
+      <div class="print-page-title">${CHILD_PAGE_TITLES[child]}</div>
       <div class="header">
         <h2>${monthLabel(year, month)}</h2>
       </div>
