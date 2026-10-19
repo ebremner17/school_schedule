@@ -1,0 +1,12 @@
+schedule_ui:
+  version: 1.x
+  css:
+    theme:
+      css/schedule.css: {}
+  js:
+    js/schedule.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery
+    - core/once

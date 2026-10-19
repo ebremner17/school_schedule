@@ -1,0 +1,6 @@
+name: 'School Schedule Manager'
+type: module
+description: 'Printable school transportation calendar (bus/dropoff/pickup) derived from the co-parenting schedule, with day-by-day admin overrides.'
+core_version_requirement: ^10 || ^11
+package: Custom
+configure: school_schedule.admin

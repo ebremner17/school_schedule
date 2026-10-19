@@ -1,0 +1,156 @@
+<div class="wrapper-container">
+  <div class="control-panel">
+    <h3 class="control-panel-title">Schedule Administration</h3>
+
+    <div class="add-month-controls">
+      <select id="add-month-select">
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <input type="number" id="add-month-year" value="2026" min="2000" max="2100">
+      <button type="button" id="add-month-btn" class="btn-primary">Add Month</button>
+    </div>
+
+    <button type="button" onclick="exportJson()" class="btn-success">Export JSON</button>
+    <button type="button" onclick="document.getElementById('import-file-input').click()" class="btn-info">Import JSON</button>
+    <button type="button" onclick="clearSchedule()" class="btn-danger">Clear All</button>
+    <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importJson(event)">
+  </div>
+
+  <div class="control-panel">
+    <h3 class="control-panel-title">Copy Month Between Kids</h3>
+    <div class="add-month-controls">
+      <select id="copy-month-select">
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+      <input type="number" id="copy-month-year" value="2026" min="2000" max="2100">
+      <select id="copy-month-direction">
+        <option value="finnley:amelia">Finnley &rarr; Amelia</option>
+        <option value="amelia:finnley">Amelia &rarr; Finnley</option>
+      </select>
+      <button type="button" id="copy-month-btn" class="btn-primary">Copy Month</button>
+    </div>
+  </div>
+
+  <div class="control-panel">
+    <h3 class="control-panel-title">Display Range</h3>
+    <div class="range-controls">
+      <div class="range-field">
+        <label class="range-label">From</label>
+        <div class="range-field-inputs">
+          <select id="range-start-month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input type="number" id="range-start-year" value="2026" min="2000" max="2100">
+        </div>
+      </div>
+      <div class="range-field">
+        <label class="range-label">To</label>
+        <div class="range-field-inputs">
+          <select id="range-end-month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input type="number" id="range-end-year" value="2026" min="2000" max="2100">
+        </div>
+      </div>
+      <button type="button" id="range-apply-btn" class="btn-primary">Show Range</button>
+      <button type="button" id="range-reset-btn" class="btn-secondary">Show All</button>
+    </div>
+  </div>
+
+  <h2 class="child-heading">Finnley</h2>
+  <div id="calendars-wrapper-finnley"></div>
+
+  <h2 class="child-heading">Amelia</h2>
+  <div id="calendars-wrapper-amelia"></div>
+</div>
+
+<div id="modal" class="modal-overlay">
+  <div class="modal-content">
+    <h3 id="modal-date-title">Edit Date</h3>
+    <input type="hidden" id="modal-date-val">
+    <input type="hidden" id="modal-child-val">
+
+    <div class="day-type-toggle">
+      <label><input type="radio" name="day-type" value="school" checked> School Day</label>
+      <label><input type="radio" name="day-type" value="non-school"> Not a School Day</label>
+    </div>
+
+    <div id="school-section" class="modal-section">
+      <label class="field-label">AM</label>
+      <div class="radio-row">
+        <label><input type="radio" name="am-option" value="bus" checked> Bus</label>
+        <label><input type="radio" name="am-option" value="dropoff"> Dropoff</label>
+        <label><input type="radio" name="am-option" value="late_arrival"> Late Arrival</label>
+      </div>
+
+      <label class="field-label">PM</label>
+      <div class="radio-row">
+        <label><input type="radio" name="pm-option" value="bus" checked> Bus</label>
+        <label><input type="radio" name="pm-option" value="pickup"> Pickup</label>
+        <label><input type="radio" name="pm-option" value="early_pickup"> Early Pickup</label>
+      </div>
+
+      <label class="field-label">Responsible Parent</label>
+      <div class="radio-row">
+        <label><input type="radio" name="parent" value="eric" checked> Eric</label>
+        <label><input type="radio" name="parent" value="sarah"> Sarah</label>
+      </div>
+    </div>
+
+    <div id="non-school-section" class="modal-section" style="display: none;">
+      <label class="field-label">What to show</label>
+      <input type="text" id="modal-occasion" placeholder="e.g. PA Day, Thanksgiving, Easter, Christmas">
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" id="modal-delete-btn" class="btn-danger" onclick="deleteDay()">Clear Day</button>
+      <span class="modal-actions-spacer"></span>
+      <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button type="button" class="btn-primary" onclick="saveDay()">Save</button>
+    </div>
+  </div>
+</div>

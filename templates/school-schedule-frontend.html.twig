@@ -1,0 +1,56 @@
+<div class="wrapper-container">
+  <div class="control-panel">
+    <h3 class="control-panel-title">Display Range</h3>
+    <div class="range-controls">
+      <div class="range-field">
+        <label class="range-label">From</label>
+        <div class="range-field-inputs">
+          <select id="range-start-month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input type="number" id="range-start-year" value="2026" min="2000" max="2100">
+        </div>
+      </div>
+      <div class="range-field">
+        <label class="range-label">To</label>
+        <div class="range-field-inputs">
+          <select id="range-end-month">
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <input type="number" id="range-end-year" value="2026" min="2000" max="2100">
+        </div>
+      </div>
+      <button type="button" id="range-apply-btn" class="btn-primary">Show Range</button>
+      <button type="button" id="range-reset-btn" class="btn-secondary">Show All</button>
+      <button type="button" id="export-pdf-btn" class="btn-success">Export to PDF</button>
+    </div>
+  </div>
+
+  <h2 class="child-heading">Finnley</h2>
+  <div id="calendars-wrapper-finnley"></div>
+
+  <h2 class="child-heading">Amelia</h2>
+  <div id="calendars-wrapper-amelia"></div>
+</div>

@@ -1,0 +1,79 @@
+school_schedule.frontend:
+  path: '/school-schedule'
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::frontend'
+    _title: 'School Schedule'
+  requirements:
+    _permission: 'access school schedule'
+
+school_schedule.admin:
+  path: '/admin/config/school-schedule'
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::admin'
+    _title: 'Manage School Schedule'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.api:
+  path: '/api/school-schedule'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::apiEndpoint'
+  requirements:
+    _permission: 'access school schedule'
+
+school_schedule.day_save:
+  path: '/admin/config/school-schedule/day/save'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::saveDay'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.day_delete:
+  path: '/admin/config/school-schedule/day/delete'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::deleteDay'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.month_add:
+  path: '/admin/config/school-schedule/month/add'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::addMonth'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.month_delete:
+  path: '/admin/config/school-schedule/month/delete'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::deleteMonth'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.month_copy:
+  path: '/admin/config/school-schedule/month/copy'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::copyMonth'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.import:
+  path: '/admin/config/school-schedule/import'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::importData'
+  requirements:
+    _permission: 'administer school schedule'
+
+school_schedule.clear:
+  path: '/admin/config/school-schedule/clear'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\school_schedule\Controller\ScheduleController::clearAll'
+  requirements:
+    _permission: 'administer school schedule'

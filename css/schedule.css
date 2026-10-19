@@ -1,0 +1,379 @@
+/**
+ * School Schedule Manager Stylesheet
+ */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background-color: #eef2f5;
+  color: #333;
+}
+
+.wrapper-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.control-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.control-panel-title {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.add-month-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.add-month-controls select,
+.add-month-controls input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.add-month-controls input[type="number"] {
+  width: 90px;
+}
+
+.range-controls {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.range-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.range-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #555;
+}
+
+.range-field-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.range-field-inputs select,
+.range-field-inputs input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.range-field-inputs input[type="number"] {
+  width: 90px;
+}
+
+.no-months-message {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 30px 0;
+}
+
+.child-heading {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+.btn-primary, .btn-secondary, .btn-success, .btn-info, .btn-danger {
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary { background: #0044ff; }
+.btn-primary:hover { background: #0033cc; }
+.btn-secondary { background: #6c757d; }
+.btn-secondary:hover { background: #5a6268; }
+.btn-success { background: #28a745; }
+.btn-success:hover { background: #218838; }
+.btn-info { background: #17a2b8; }
+.btn-info:hover { background: #138496; }
+.btn-danger { background: #dc3545; }
+.btn-danger:hover { background: #c82333; }
+
+.calendar-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+.month-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.remove-month-btn {
+  background: none;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.remove-month-btn:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 2px solid #222;
+  border-left: 2px solid #222;
+}
+
+.day-header {
+  background-color: #f1f3f5;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px 0;
+  border-right: 2px solid #222;
+  border-bottom: 2px solid #222;
+  font-size: 13px;
+}
+
+.cell {
+  min-height: 100px;
+  border-right: 2px solid #222;
+  border-bottom: 2px solid #222;
+  position: relative;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.cell.editable {
+  cursor: pointer;
+}
+
+.cell.editable:hover {
+  background-color: #f0f4ff;
+}
+
+.cell.empty {
+  background-color: #fcfcfc;
+  cursor: default;
+}
+
+.day-number {
+  text-align: right;
+  font-weight: bold;
+  padding: 4px 6px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.cell-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 6px 10px;
+  text-align: center;
+}
+
+.cell-line {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.cell-parent {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.cell-parent.parent-eric { color: #0044ff; }
+.cell-parent.parent-sarah { color: #c2178b; }
+
+.cell-solo {
+  font-size: 12.5px;
+  line-height: 1.3;
+}
+
+/* Day-edit modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 440px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.day-type-toggle {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  font-weight: 600;
+}
+
+.modal-section {
+  margin-bottom: 14px;
+}
+
+.field-label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.modal-content input[type="time"],
+.modal-content input[type="text"],
+.modal-content select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.radio-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.modal-actions {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-actions-spacer {
+  flex-grow: 1;
+}
+
+/* Print Styles for clean PDF exporting */
+@media print {
+  @page {
+    size: letter landscape;
+    margin: 0.4in;
+  }
+
+  body {
+    background-color: #fff !important;
+    margin: 0 !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* On export, JS relocates .wrapper-container to be a direct child of
+     <body> so it escapes any ancestor layout/margin quirks from the site
+     theme or admin toolbar. Hide every other direct child of <body>. */
+  body > *:not(.wrapper-container) {
+    display: none !important;
+  }
+
+  .control-panel, .modal-overlay, .month-actions, .no-print {
+    display: none !important;
+  }
+
+  .wrapper-container {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .calendar-container {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+
+  /* A 6-row month (when the 1st falls late in the week and the 31st starts
+     a new row) is taller than a landscape letter page at the normal 100px
+     cell height. Shrink cells for print so even a 6-row month fits on one
+     page. */
+  .cell {
+    min-height: 78px !important;
+  }
+
+  .child-heading {
+    break-before: page;
+  }
+
+  .child-heading:first-of-type {
+    break-before: auto;
+  }
+
+  .calendar-container {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .calendar-container:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+}

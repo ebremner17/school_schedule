@@ -1,0 +1,7 @@
+access school schedule:
+  title: 'Access School Schedule'
+  description: 'View the printable school transportation calendar.'
+
+administer school schedule:
+  title: 'Administer School Schedule'
+  description: 'Edit school schedule days, exchange overrides, and occasions.'

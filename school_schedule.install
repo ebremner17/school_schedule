@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function school_schedule_schema() {
+  $schema['school_schedule_months'] = [
+    'description' => 'Months configured to display on the school schedule calendars (shared by both children).',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE, 'unsigned' => TRUE],
+      'year' => ['type' => 'int', 'not null' => TRUE],
+      'month' => ['type' => 'int', 'not null' => TRUE, 'description' => '1-12'],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'year_month' => ['year', 'month'],
+    ],
+  ];
+
+  $schema['school_schedule_days'] = [
+    'description' => 'Per-child, per-day manual school schedule entries.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE, 'unsigned' => TRUE],
+      'child' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'description' => 'finnley|amelia'],
+      'day_date' => ['type' => 'varchar', 'length' => 10, 'not null' => TRUE, 'description' => 'YYYY-MM-DD'],
+      'is_school_day' => ['type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 1],
+      'am_option' => ['type' => 'varchar', 'length' => 20, 'null' => TRUE, 'description' => 'bus|dropoff|late_arrival'],
+      'pm_option' => ['type' => 'varchar', 'length' => 20, 'null' => TRUE, 'description' => 'bus|pickup|early_pickup'],
+      'parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah'],
+      'occasion_text' => ['type' => 'varchar', 'length' => 100, 'null' => TRUE, 'description' => 'Free text shown on non-school days, e.g. PA Day, Thanksgiving.'],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'child_day_date' => ['child', 'day_date'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function school_schedule_install() {
+  $database = \Drupal::database();
+  $months = [
+    [2026, 9], [2026, 10], [2026, 11], [2026, 12],
+    [2027, 1], [2027, 2], [2027, 3],
+  ];
+  foreach ($months as [$year, $month]) {
+    $database->merge('school_schedule_months')
+      ->keys(['year' => $year, 'month' => $month])
+      ->execute();
+  }
+}
