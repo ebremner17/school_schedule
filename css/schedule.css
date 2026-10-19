@@ -90,11 +90,6 @@ body {
   padding: 30px 0;
 }
 
-.child-heading {
-  margin: 0 0 12px;
-  font-size: 22px;
-}
-
 .btn-primary, .btn-secondary, .btn-success, .btn-info, .btn-danger {
   color: #fff;
   border: none;
@@ -124,7 +119,10 @@ body {
 }
 
 .print-page-title {
-  display: none;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
 .header {
@@ -373,21 +371,7 @@ body {
     font-size: 20px !important;
   }
 
-  /* Each printed page now carries its own "<Child> School Schedule" title
-     (see .print-page-title below), so the on-screen section heading above
-     each child's calendars would otherwise print as its own near-empty
-     leading page. Zero it out completely rather than relying on display
-     alone, so it can't contribute stray height/page-break behavior. */
-  .child-heading {
-    display: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: 0 !important;
-    border: 0 !important;
-  }
-
   .print-page-title {
-    display: block !important;
     width: 100%;
     text-align: center !important;
     font-size: 20px;
