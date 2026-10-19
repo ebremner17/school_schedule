@@ -54,7 +54,7 @@ class ScheduleController extends ControllerBase {
       ->fetchAll();
 
     $days = $database->select('school_schedule_days', 'd')
-      ->fields('d', ['child', 'day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text'])
+      ->fields('d', ['child', 'day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text', 'description'])
       ->execute()
       ->fetchAll();
 
@@ -82,6 +82,7 @@ class ScheduleController extends ControllerBase {
       'pm_option' => NULL,
       'parent' => NULL,
       'occasion_text' => NULL,
+      'description' => NULL,
     ];
 
     if ($isSchoolDay) {
@@ -96,6 +97,8 @@ class ScheduleController extends ControllerBase {
       $fields['am_option'] = $am;
       $fields['pm_option'] = $pm;
       $fields['parent'] = $parent;
+      $description = trim((string) ($data['description'] ?? ''));
+      $fields['description'] = ('' !== $description) ? $description : NULL;
     }
     else {
       $occasion = trim((string) ($data['occasion_text'] ?? ''));
@@ -194,7 +197,7 @@ class ScheduleController extends ControllerBase {
     $prefix = sprintf('%04d-%02d-', $year, $month);
 
     $sourceRows = $database->select('school_schedule_days', 'd')
-      ->fields('d', ['day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text'])
+      ->fields('d', ['day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text', 'description'])
       ->condition('child', $from)
       ->condition('day_date', $database->escapeLike($prefix) . '%', 'LIKE')
       ->execute()
@@ -214,6 +217,7 @@ class ScheduleController extends ControllerBase {
           'pm_option' => $row->pm_option,
           'parent' => $row->parent,
           'occasion_text' => $row->occasion_text,
+          'description' => $row->description,
         ])
         ->execute();
     }
@@ -252,6 +256,7 @@ class ScheduleController extends ControllerBase {
           'pm_option' => $d['pm_option'] ?? NULL,
           'parent' => $d['parent'] ?? NULL,
           'occasion_text' => $d['occasion_text'] ?? NULL,
+          'description' => $d['description'] ?? NULL,
         ])
         ->execute();
     }

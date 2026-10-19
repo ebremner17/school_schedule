@@ -28,6 +28,7 @@ function school_schedule_schema() {
       'pm_option' => ['type' => 'varchar', 'length' => 20, 'null' => TRUE, 'description' => 'bus|pickup|early_pickup'],
       'parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah'],
       'occasion_text' => ['type' => 'varchar', 'length' => 100, 'null' => TRUE, 'description' => 'Free text shown on non-school days, e.g. PA Day, Thanksgiving.'],
+      'description' => ['type' => 'varchar', 'length' => 100, 'null' => TRUE, 'description' => 'Optional free text on a school day, e.g. Speech Therapy.'],
     ],
     'primary key' => ['id'],
     'unique keys' => [
@@ -52,4 +53,23 @@ function school_schedule_install() {
       ->keys(['year' => $year, 'month' => $month])
       ->execute();
   }
+}
+
+/**
+ * Add the "description" column (free text on a school day, e.g. Speech
+ * Therapy) to school_schedule_days.
+ */
+function school_schedule_update_9001(&$sandbox) {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('school_schedule_days', 'description')) {
+    $schema->addField('school_schedule_days', 'description', [
+      'type' => 'varchar',
+      'length' => 100,
+      'null' => TRUE,
+      'description' => 'Optional free text on a school day, e.g. Speech Therapy.',
+    ]);
+  }
+
+  return t('Added the description column to school_schedule_days.');
 }

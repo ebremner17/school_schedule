@@ -189,6 +189,7 @@
     }
     return {
       kind: 'transport',
+      description: (entry.description || '').trim(),
       amText: `AM: ${AM_LABELS[entry.am_option] || entry.am_option}`,
       pmText: `PM: ${PM_LABELS[entry.pm_option] || entry.pm_option}`,
       parent: entry.parent,
@@ -277,6 +278,12 @@
       line.innerText = result.text;
       content.appendChild(line);
     } else if (result.kind === 'transport') {
+      if (result.description) {
+        const descLine = document.createElement('div');
+        descLine.className = 'cell-description';
+        descLine.innerText = result.description;
+        content.appendChild(descLine);
+      }
       [result.amText, result.pmText].forEach(text => {
         const line = document.createElement('div');
         line.className = 'cell-line';
@@ -335,6 +342,7 @@
       r.checked = (entry && entry.parent) ? (r.value === entry.parent) : (r.value === 'eric');
     });
     document.getElementById('modal-occasion').value = (entry && entry.occasion_text) || '';
+    document.getElementById('modal-description').value = (entry && entry.description) || '';
 
     document.getElementById('modal-delete-btn').style.display = entry ? 'inline-block' : 'none';
 
@@ -361,6 +369,7 @@
         alert('Please choose AM, PM, and the responsible parent.');
         return;
       }
+      payload.description = document.getElementById('modal-description').value.trim();
     } else {
       payload.occasion_text = document.getElementById('modal-occasion').value.trim();
     }
