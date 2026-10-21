@@ -190,9 +190,15 @@
     return {
       kind: 'transport',
       description: (entry.description || '').trim(),
-      amText: `AM: ${AM_LABELS[entry.am_option] || entry.am_option}`,
-      pmText: `PM: ${PM_LABELS[entry.pm_option] || entry.pm_option}`,
-      parent: entry.parent,
+      am: {
+        text: `AM: ${AM_LABELS[entry.am_option] || entry.am_option}`,
+        parent: entry.am_option === 'late_arrival' ? entry.late_arrival_parent : null,
+      },
+      pm: {
+        text: `PM: ${PM_LABELS[entry.pm_option] || entry.pm_option}`,
+        parent: entry.pm_option === 'early_pickup' ? entry.early_pickup_parent : null,
+      },
+      responsibleParent: entry.parent,
     };
   }
 
@@ -284,16 +290,24 @@
         descLine.innerText = result.description;
         content.appendChild(descLine);
       }
-      [result.amText, result.pmText].forEach(text => {
+      [result.am, result.pm].forEach(info => {
         const line = document.createElement('div');
         line.className = 'cell-line';
-        line.innerText = text;
+        line.appendChild(document.createTextNode(info.text));
+        if (info.parent) {
+          const parentSpan = document.createElement('span');
+          parentSpan.className = `parent-name parent-${info.parent}`;
+          parentSpan.innerText = ` (${capitalize(info.parent)})`;
+          line.appendChild(parentSpan);
+        }
         content.appendChild(line);
       });
-      const parentLine = document.createElement('div');
-      parentLine.className = `cell-parent parent-${result.parent}`;
-      parentLine.innerText = capitalize(result.parent);
-      content.appendChild(parentLine);
+      if (result.responsibleParent) {
+        const parentLine = document.createElement('div');
+        parentLine.className = `cell-parent parent-${result.responsibleParent}`;
+        parentLine.innerText = capitalize(result.responsibleParent);
+        content.appendChild(parentLine);
+      }
     }
 
     cell.appendChild(content);
@@ -313,9 +327,22 @@
     document.getElementById('non-school-section').style.display = dayType === 'non-school' ? 'block' : 'none';
   }
 
+  function toggleParentFields() {
+    const am = document.querySelector('input[name="am-option"]:checked')?.value;
+    const pm = document.querySelector('input[name="pm-option"]:checked')?.value;
+    document.getElementById('late-arrival-parent-field').style.display = am === 'late_arrival' ? 'block' : 'none';
+    document.getElementById('early-pickup-parent-field').style.display = pm === 'early_pickup' ? 'block' : 'none';
+  }
+
   function wireModal() {
     document.querySelectorAll('input[name="day-type"]').forEach(r => {
       r.addEventListener('change', (e) => toggleDayTypeSections(e.target.value));
+    });
+    document.querySelectorAll('input[name="am-option"]').forEach(r => {
+      r.addEventListener('change', toggleParentFields);
+    });
+    document.querySelectorAll('input[name="pm-option"]').forEach(r => {
+      r.addEventListener('change', toggleParentFields);
     });
   }
 
@@ -338,9 +365,16 @@
     document.querySelectorAll('input[name="pm-option"]').forEach(r => {
       r.checked = (entry && entry.pm_option) ? (r.value === entry.pm_option) : (r.value === 'bus');
     });
+    document.querySelectorAll('input[name="late-arrival-parent"]').forEach(r => {
+      r.checked = (entry && entry.late_arrival_parent) ? (r.value === entry.late_arrival_parent) : (r.value === 'eric');
+    });
+    document.querySelectorAll('input[name="early-pickup-parent"]').forEach(r => {
+      r.checked = (entry && entry.early_pickup_parent) ? (r.value === entry.early_pickup_parent) : (r.value === 'eric');
+    });
     document.querySelectorAll('input[name="parent"]').forEach(r => {
       r.checked = (entry && entry.parent) ? (r.value === entry.parent) : (r.value === 'eric');
     });
+    toggleParentFields();
     document.getElementById('modal-occasion').value = (entry && entry.occasion_text) || '';
     document.getElementById('modal-description').value = (entry && entry.description) || '';
 
@@ -368,6 +402,20 @@
       if (!payload.am_option || !payload.pm_option || !payload.parent) {
         alert('Please choose AM, PM, and the responsible parent.');
         return;
+      }
+      if (payload.am_option === 'late_arrival') {
+        payload.late_arrival_parent = document.querySelector('input[name="late-arrival-parent"]:checked')?.value;
+        if (!payload.late_arrival_parent) {
+          alert('Please choose the Late Arrival Parent.');
+          return;
+        }
+      }
+      if (payload.pm_option === 'early_pickup') {
+        payload.early_pickup_parent = document.querySelector('input[name="early-pickup-parent"]:checked')?.value;
+        if (!payload.early_pickup_parent) {
+          alert('Please choose the Early Pickup Parent.');
+          return;
+        }
       }
       payload.description = document.getElementById('modal-description').value.trim();
     } else {

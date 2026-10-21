@@ -54,7 +54,7 @@ class ScheduleController extends ControllerBase {
       ->fetchAll();
 
     $days = $database->select('school_schedule_days', 'd')
-      ->fields('d', ['child', 'day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text', 'description'])
+      ->fields('d', ['child', 'day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'late_arrival_parent', 'early_pickup_parent', 'occasion_text', 'description'])
       ->execute()
       ->fetchAll();
 
@@ -81,6 +81,8 @@ class ScheduleController extends ControllerBase {
       'am_option' => NULL,
       'pm_option' => NULL,
       'parent' => NULL,
+      'late_arrival_parent' => NULL,
+      'early_pickup_parent' => NULL,
       'occasion_text' => NULL,
       'description' => NULL,
     ];
@@ -94,9 +96,26 @@ class ScheduleController extends ControllerBase {
         || !in_array($parent, ['eric', 'sarah'], TRUE)) {
         return new JsonResponse(['success' => FALSE, 'message' => 'AM, PM, and Responsible Parent are required for a school day.'], 400);
       }
+      $fields['parent'] = $parent;
+
+      $lateArrivalParent = $data['late_arrival_parent'] ?? '';
+      if ($am === 'late_arrival') {
+        if (!in_array($lateArrivalParent, ['eric', 'sarah'], TRUE)) {
+          return new JsonResponse(['success' => FALSE, 'message' => 'Late Arrival Parent is required when AM is Late Arrival.'], 400);
+        }
+        $fields['late_arrival_parent'] = $lateArrivalParent;
+      }
+
+      $earlyPickupParent = $data['early_pickup_parent'] ?? '';
+      if ($pm === 'early_pickup') {
+        if (!in_array($earlyPickupParent, ['eric', 'sarah'], TRUE)) {
+          return new JsonResponse(['success' => FALSE, 'message' => 'Early Pickup Parent is required when PM is Early Pickup.'], 400);
+        }
+        $fields['early_pickup_parent'] = $earlyPickupParent;
+      }
+
       $fields['am_option'] = $am;
       $fields['pm_option'] = $pm;
-      $fields['parent'] = $parent;
       $description = trim((string) ($data['description'] ?? ''));
       $fields['description'] = ('' !== $description) ? $description : NULL;
     }
@@ -197,7 +216,7 @@ class ScheduleController extends ControllerBase {
     $prefix = sprintf('%04d-%02d-', $year, $month);
 
     $sourceRows = $database->select('school_schedule_days', 'd')
-      ->fields('d', ['day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'occasion_text', 'description'])
+      ->fields('d', ['day_date', 'is_school_day', 'am_option', 'pm_option', 'parent', 'late_arrival_parent', 'early_pickup_parent', 'occasion_text', 'description'])
       ->condition('child', $from)
       ->condition('day_date', $database->escapeLike($prefix) . '%', 'LIKE')
       ->execute()
@@ -216,6 +235,8 @@ class ScheduleController extends ControllerBase {
           'am_option' => $row->am_option,
           'pm_option' => $row->pm_option,
           'parent' => $row->parent,
+          'late_arrival_parent' => $row->late_arrival_parent,
+          'early_pickup_parent' => $row->early_pickup_parent,
           'occasion_text' => $row->occasion_text,
           'description' => $row->description,
         ])
@@ -255,6 +276,8 @@ class ScheduleController extends ControllerBase {
           'am_option' => $d['am_option'] ?? NULL,
           'pm_option' => $d['pm_option'] ?? NULL,
           'parent' => $d['parent'] ?? NULL,
+          'late_arrival_parent' => $d['late_arrival_parent'] ?? NULL,
+          'early_pickup_parent' => $d['early_pickup_parent'] ?? NULL,
           'occasion_text' => $d['occasion_text'] ?? NULL,
           'description' => $d['description'] ?? NULL,
         ])

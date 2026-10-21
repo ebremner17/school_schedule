@@ -26,7 +26,9 @@ function school_schedule_schema() {
       'is_school_day' => ['type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 1],
       'am_option' => ['type' => 'varchar', 'length' => 20, 'null' => TRUE, 'description' => 'bus|dropoff|late_arrival'],
       'pm_option' => ['type' => 'varchar', 'length' => 20, 'null' => TRUE, 'description' => 'bus|pickup|early_pickup'],
-      'parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah'],
+      'parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah, the responsible parent for the day'],
+      'late_arrival_parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah, set when am_option is late_arrival'],
+      'early_pickup_parent' => ['type' => 'varchar', 'length' => 10, 'null' => TRUE, 'description' => 'eric|sarah, set when pm_option is early_pickup'],
       'occasion_text' => ['type' => 'varchar', 'length' => 100, 'null' => TRUE, 'description' => 'Free text shown on non-school days, e.g. PA Day, Thanksgiving.'],
       'description' => ['type' => 'varchar', 'length' => 100, 'null' => TRUE, 'description' => 'Optional free text on a school day, e.g. Speech Therapy.'],
     ],
@@ -72,4 +74,64 @@ function school_schedule_update_9001(&$sandbox) {
   }
 
   return t('Added the description column to school_schedule_days.');
+}
+
+/**
+ * Replace the generic "parent" column with "late_arrival_parent" and
+ * "early_pickup_parent", each only meaningful when the matching AM/PM
+ * option is selected.
+ */
+function school_schedule_update_9002(&$sandbox) {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+
+  if (!$schema->fieldExists('school_schedule_days', 'late_arrival_parent')) {
+    $schema->addField('school_schedule_days', 'late_arrival_parent', [
+      'type' => 'varchar',
+      'length' => 10,
+      'null' => TRUE,
+      'description' => 'eric|sarah, set when am_option is late_arrival',
+    ]);
+  }
+  if (!$schema->fieldExists('school_schedule_days', 'early_pickup_parent')) {
+    $schema->addField('school_schedule_days', 'early_pickup_parent', [
+      'type' => 'varchar',
+      'length' => 10,
+      'null' => TRUE,
+      'description' => 'eric|sarah, set when pm_option is early_pickup',
+    ]);
+  }
+
+  if ($schema->fieldExists('school_schedule_days', 'parent')) {
+    $database->update('school_schedule_days')
+      ->expression('late_arrival_parent', 'parent')
+      ->condition('am_option', 'late_arrival')
+      ->execute();
+    $database->update('school_schedule_days')
+      ->expression('early_pickup_parent', 'parent')
+      ->condition('pm_option', 'early_pickup')
+      ->execute();
+    $schema->dropField('school_schedule_days', 'parent');
+  }
+
+  return t('Replaced the parent column with late_arrival_parent and early_pickup_parent.');
+}
+
+/**
+ * Re-add the "parent" column (the responsible parent for the whole school
+ * day) alongside late_arrival_parent and early_pickup_parent.
+ */
+function school_schedule_update_9003(&$sandbox) {
+  $schema = \Drupal::database()->schema();
+
+  if (!$schema->fieldExists('school_schedule_days', 'parent')) {
+    $schema->addField('school_schedule_days', 'parent', [
+      'type' => 'varchar',
+      'length' => 10,
+      'null' => TRUE,
+      'description' => 'eric|sarah, the responsible parent for the day',
+    ]);
+  }
+
+  return t('Re-added the parent column to school_schedule_days.');
 }
