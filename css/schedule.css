@@ -161,7 +161,7 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   border-top: 2px solid #222;
   border-left: 2px solid #222;
 }

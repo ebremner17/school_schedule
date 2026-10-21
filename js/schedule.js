@@ -228,7 +228,6 @@
 
   function buildMonthCard(year, month, child) {
     const nDays = daysInMonth(year, month);
-    const firstDayIndex = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
 
     const card = document.createElement('div');
     card.className = 'calendar-container';
@@ -239,18 +238,25 @@
       </div>
       ${EDITABLE ? `<div class="month-actions"><button type="button" class="remove-month-btn">Remove Month</button></div>` : ''}
       <div class="grid">
-        <div class="day-header">Sun</div><div class="day-header">Mon</div><div class="day-header">Tue</div>
-        <div class="day-header">Wed</div><div class="day-header">Thu</div><div class="day-header">Fri</div><div class="day-header">Sat</div>
+        <div class="day-header">Mon</div><div class="day-header">Tue</div><div class="day-header">Wed</div>
+        <div class="day-header">Thu</div><div class="day-header">Fri</div>
       </div>
     `;
 
     const grid = card.querySelector('.grid');
-    for (let i = 0; i < firstDayIndex; i++) {
-      const empty = document.createElement('div');
-      empty.className = 'cell empty';
-      grid.appendChild(empty);
-    }
+    let placedAny = false;
     for (let day = 1; day <= nDays; day++) {
+      const dow = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+      if (dow === 0 || dow === 6) continue;
+      if (!placedAny) {
+        const offset = dow - 1;
+        for (let i = 0; i < offset; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'cell empty';
+          grid.appendChild(empty);
+        }
+        placedAny = true;
+      }
       grid.appendChild(renderDayCell(year, month, day, child));
     }
 
